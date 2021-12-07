@@ -15,7 +15,7 @@ logging.basicConfig(
 
 def main():
     fake = Faker(["fi_FI"])
-    helth_check_url = f"http://{os.environ['API_URL']}/health"
+    helth_check_url = f"http://{os.environ['API_URL']}/todos/health"
     url = f"http://{os.environ['API_URL']}/todos"
 
 
