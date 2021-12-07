@@ -18,21 +18,19 @@ def main():
     helth_check_url = f"http://{os.environ['API_URL']}/health"
     url = f"http://{os.environ['API_URL']}/todos"
 
-    not_ready = True
-    while not_ready:
-        r = requests.get(helth_check_url)
-        if r.status_code == 200:
-            not_ready = False
-            logger.info("api seems to be ready")
 
-    for n in range(count):
-        new_todo = {"task": f"{n}: {fake.paragraph(nb_sentences=1)}"}
-        try:
-            r = requests.post(url, json=new_todo)
-            logger.info(f"response: {r.status_code} {r.content}")
-        except Exception as error:
-            logger.error(f"posting request failed: {error}")
-        time.sleep(random.randint(1, 10))
+    r = requests.get(helth_check_url, timeout=10)
+    if r.status_code == 200:
+        for n in range(count):
+            new_todo = {"task": fake.paragraph(nb_sentences=1)}
+            try:
+                r = requests.post(url, json=new_todo, timeout=10)
+                logger.info(f"response: {r.status_code} {r.content}")
+            except Exception as error:
+                logger.error(f"posting request failed: {error}")
+            time.sleep(random.randint(1, 10))
+    else:
+        logger.info(f"service is down or request failed, statuscode: {r.status_code}")
 
 
 if __name__ == "__main__":

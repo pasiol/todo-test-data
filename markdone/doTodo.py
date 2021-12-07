@@ -18,12 +18,12 @@ def main():
         todos = r.json()
         count_of_todos = len(todos)
         if count_of_todos > 0:
-            random_todo = random.randint(0, count_of_todos-1)
-            url = f"{url}/{random_todo-1}"
+            random_todo = todos[random.randint(0, count_of_todos-1)]
+            url = f"{url}/{random_todo['ID']}"
             try:
                 r = requests.put(url, timeout=10)
                 if r.status_code == 200:
-                    logger.info(f"successfully marked {todos[random_todo-1]} done")
+                    logger.info(f"successfully marked {todos[random_todo]} done")
             except Exception as error:
                 logger(f"put request failed {url}, error: {error}")
         else:
