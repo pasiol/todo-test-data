@@ -4,16 +4,20 @@ metadata:
   name: todo-mark-done
   namespace: todo-project
 spec:
-  schedule: "*/2 * * * *"
   jobTemplate:
     spec:
       template:
+        metadata:
+          annotations:
+            linkerd.io/inject: enabled
         spec:
           containers:
-            - name: todo-project-markdone
-              env:
-                - name: API_URL
-                  value: todo-project-backend-svc:8888
-              image: pasiol/markdone
-              imagePullPolicy: IfNotPresent
+          - env:
+            - name: API_URL
+              value: todo-project-backend-svc:8888
+            image: pasiol/todo-markdone@sha256:87c9c09cac7a9a7e539f0df891f58b8c88ccc18ecd8a0ce7a1c9d4afdb7a910e
+            imagePullPolicy: IfNotPresent
+            name: todo-project-markdone
           restartPolicy: Never
+  schedule: '*/2 * * * *'
+---
